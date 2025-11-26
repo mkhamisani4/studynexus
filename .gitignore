@@ -31,6 +31,11 @@ yarn-debug.log*
 # setup documentation
 ENV_SETUP.md
 
+# personal documentation
+FUNCTIONALITY_STATUS.md
+QUICK_START.md
+README copy.md
+
 # vercel
 .vercel
 
