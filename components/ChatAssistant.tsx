@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { MessageCircle, X, Send, Loader2, Bot, User } from 'lucide-react'
+import { Sparkles, X, Send, Loader2, Minimize2 } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import { supabase } from '@/lib/supabase'
 
@@ -107,110 +107,123 @@ export default function ChatAssistant() {
 
   return (
     <>
-      {/* Floating Chat Bubble */}
+      {/* Floating Assistant Button */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center z-[100] hover:scale-110"
+          className="fixed bottom-6 right-6 w-14 h-14 bg-white dark:bg-gray-800 rounded-full shadow-xl border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all flex items-center justify-center z-[100] hover:scale-105 group"
           aria-label="Open AI Assistant"
         >
-          <MessageCircle className="w-6 h-6" />
+          <Sparkles className="w-6 h-6 text-blue-600 dark:text-blue-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
         </button>
       )}
 
-      {/* Chat Window */}
+      {/* Assistant Panel */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 w-96 h-[600px] bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col z-[100]">
-          {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-xl">
+        <div className="fixed bottom-6 right-6 w-[420px] h-[640px] bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col z-[100] overflow-hidden backdrop-blur-sm">
+          {/* Minimal Header */}
+          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-gray-700/50">
             <div className="flex items-center space-x-2">
-              <Bot className="w-5 h-5" />
-              <h3 className="font-semibold">AI Assistant</h3>
+              <div className="w-2 h-2 rounded-full bg-green-500"></div>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">AI Assistant</span>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="text-white hover:text-gray-200 transition-colors"
-              aria-label="Close chat"
+              className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+              aria-label="Close"
             >
-              <X className="w-5 h-5" />
+              <Minimize2 className="w-4 h-4" />
             </button>
           </div>
 
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-900/50">
+          {/* Messages Area */}
+          <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6 bg-gradient-to-b from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-900/50">
             {messages.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-center">
-                <Bot className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-4" />
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
-                  Ask me anything about your notes, study progress, or concepts!
+              <div className="flex flex-col items-center justify-center h-full text-center space-y-3">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-500/20 dark:to-purple-500/20 flex items-center justify-center mb-2">
+                  <Sparkles className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">How can I help?</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs">
+                  Ask me anything about your notes, study progress, or concepts
                 </p>
               </div>
             ) : (
               messages.map((message, idx) => (
                 <div
                   key={idx}
-                  className={`flex items-start space-x-2 ${
-                    message.role === 'user' ? 'justify-end' : 'justify-start'
-                  }`}
+                  className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  {message.role === 'assistant' && (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
-                      <Bot className="w-4 h-4 text-white" />
-                    </div>
-                  )}
-                  <div
-                    className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                      message.role === 'user'
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600'
-                    }`}
-                  >
-                    {message.role === 'assistant' ? (
-                      <div className="prose prose-sm dark:prose-invert max-w-none">
-                        <ReactMarkdown>{message.content}</ReactMarkdown>
+                  <div className={`max-w-[85%] ${message.role === 'user' ? 'order-2' : 'order-1'}`}>
+                    {message.role === 'assistant' && (
+                      <div className="mb-1.5 ml-1">
+                        <span className="text-xs font-medium text-gray-500 dark:text-gray-400">Assistant</span>
                       </div>
-                    ) : (
-                      <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                    )}
+                    <div
+                      className={`rounded-2xl px-4 py-3 ${
+                        message.role === 'user'
+                          ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-sm'
+                          : 'bg-gray-100 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100'
+                      }`}
+                    >
+                      {message.role === 'assistant' ? (
+                        <div className="prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-p:leading-relaxed prose-headings:my-2 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5">
+                          <ReactMarkdown>{message.content}</ReactMarkdown>
+                        </div>
+                      ) : (
+                        <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+                      )}
+                    </div>
+                    {message.role === 'user' && (
+                      <div className="mt-1.5 mr-1 text-right">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">You</span>
+                      </div>
                     )}
                   </div>
-                  {message.role === 'user' && (
-                    <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
-                      <User className="w-4 h-4 text-gray-700 dark:text-gray-300" />
-                    </div>
-                  )}
                 </div>
               ))
             )}
             {loading && (
-              <div className="flex items-start space-x-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
-                  <Bot className="w-4 h-4 text-white" />
-                </div>
-                <div className="bg-white dark:bg-gray-700 rounded-lg px-4 py-2 border border-gray-200 dark:border-gray-600">
-                  <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
+              <div className="flex justify-start">
+                <div className="max-w-[85%]">
+                  <div className="mb-1.5 ml-1">
+                    <span className="text-xs font-medium text-gray-500 dark:text-gray-400">Assistant</span>
+                  </div>
+                  <div className="bg-gray-100 dark:bg-gray-700/50 rounded-2xl px-4 py-3">
+                    <div className="flex items-center space-x-2">
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                        <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                        <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-b-xl">
-            <div className="flex items-center space-x-2">
-              <input
-                ref={inputRef}
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Ask me anything..."
-                disabled={loading}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
-              />
+          {/* Input Area */}
+          <div className="px-5 py-4 border-t border-gray-100 dark:border-gray-700/50 bg-white dark:bg-gray-800">
+            <div className="flex items-end space-x-3">
+              <div className="flex-1 relative">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Ask anything..."
+                  disabled={loading}
+                  className="w-full px-4 py-3 pr-12 bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 dark:focus:border-blue-400 transition-all disabled:opacity-50 text-sm"
+                />
+              </div>
               <button
                 onClick={sendMessage}
                 disabled={loading || !input.trim()}
-                className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl hover:from-blue-700 hover:to-blue-600 shadow-sm hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-sm flex-shrink-0"
                 aria-label="Send message"
               >
                 {loading ? (
@@ -226,4 +239,3 @@ export default function ChatAssistant() {
     </>
   )
 }
-
