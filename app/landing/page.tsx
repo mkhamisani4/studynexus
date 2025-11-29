@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Brain, GraduationCap, Zap, Target, ArrowRight, Sparkles, TrendingUp, Users, BookOpen, CheckCircle2, Star } from 'lucide-react'
+import { Brain, GraduationCap, Zap, Target, ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export default function LandingPage() {
@@ -37,13 +37,6 @@ export default function LandingPage() {
       description: 'Set and track your learning objectives with AI-powered scheduling',
       color: 'from-green-500 to-emerald-500'
     }
-  ]
-
-  const stats = [
-    { icon: Users, value: '10K+', label: 'Active Students' },
-    { icon: BookOpen, value: '50K+', label: 'Study Materials' },
-    { icon: TrendingUp, value: '95%', label: 'Success Rate' },
-    { icon: Star, value: '4.9/5', label: 'User Rating' }
   ]
 
   const benefits = [
@@ -128,26 +121,6 @@ export default function LandingPage() {
               Sign In
             </button>
           </div>
-        </div>
-
-        {/* Stats Section */}
-        <div className={`mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 transform transition-all duration-1000 delay-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          {stats.map((stat, index) => {
-            const Icon = stat.icon
-            return (
-              <div
-                key={index}
-                className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-md rounded-xl p-6 border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl hover:scale-105 transition-all transform"
-              >
-                <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg mb-3 mx-auto">
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{stat.value}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</div>
-
-              </div>
-            )
-          })}
         </div>
       </section>
 
