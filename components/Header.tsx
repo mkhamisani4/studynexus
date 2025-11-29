@@ -31,39 +31,36 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex-1"></div>
-          <div className="flex-1 flex items-center justify-center">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-              StudyNexus
-            </h1>
-          </div>
-          <div className="flex-1 flex justify-end items-center space-x-3">
+    <header className="sticky top-0 z-50 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md">
+      <div className="mx-auto max-w-[1920px] px-6">
+        <div className="relative flex h-16 items-center justify-center">
+          <h1 className="text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-50">
+            StudyNexus
+          </h1>
+          <div className="absolute right-0 flex items-center gap-2">
             {user && (
-              <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
-                <User className="w-4 h-4" />
-                <span className="hidden sm:inline">{user.email}</span>
+              <div className="hidden items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-slate-600 dark:text-slate-400 sm:flex">
+                <User className="h-4 w-4" />
+                <span className="max-w-[120px] truncate">{user.email?.split('@')[0]}</span>
               </div>
             )}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-50"
               aria-label="Toggle theme"
             >
               {theme === 'light' ? (
-                <Moon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                <Moon className="h-4 w-4" />
               ) : (
-                <Sun className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                <Sun className="h-4 w-4" />
               )}
             </button>
             <button
               onClick={handleLogout}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-50"
               aria-label="Logout"
             >
-              <LogOut className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+              <LogOut className="h-4 w-4" />
             </button>
           </div>
         </div>
@@ -71,4 +68,3 @@ export default function Header() {
     </header>
   )
 }
-

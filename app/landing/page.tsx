@@ -109,7 +109,7 @@ export default function LandingPage() {
             </span>
           </h1>
           <p className={`text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed transform transition-all duration-1000 delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
-            Your intelligent learning partner that helps you master any subject with AI-generated quizzes, 
+            Your intelligent learning partner that helps you master any subject with auto generated quizzes, 
             personalized study plans, and real-time progress tracking.
           </p>
           <div className={`flex flex-col sm:flex-row items-center justify-center gap-4 transform transition-all duration-1000 delay-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
@@ -144,6 +144,7 @@ export default function LandingPage() {
                 </div>
                 <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{stat.value}</div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</div>
+
               </div>
             )
           })}
@@ -270,4 +271,5 @@ export default function LandingPage() {
     </div>
   )
 }
+
 

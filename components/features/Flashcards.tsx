@@ -206,7 +206,7 @@ export default function Flashcards() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Flashcards</h1>
-            <p className="text-gray-600 dark:text-gray-300 mt-1">Practice with AI-generated flashcards</p>
+            <p className="text-gray-600 dark:text-gray-300 mt-1">Practice with flashcards</p>
           </div>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-lg p-12 border border-gray-200 dark:border-gray-700 text-center">
@@ -223,7 +223,7 @@ export default function Flashcards() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Flashcards</h1>
-            <p className="text-gray-600 dark:text-gray-300 mt-1">Practice with AI-generated flashcards</p>
+            <p className="text-gray-600 dark:text-gray-300 mt-1">Practice with flashcards</p>
           </div>
           {!showMaterialSelection && (
             <button
@@ -366,7 +366,7 @@ export default function Flashcards() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Flashcards</h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-1">Practice with AI-generated flashcards</p>
+          <p className="text-gray-600 dark:text-gray-300 mt-1">Practice with flashcards</p>
         </div>
         <div className="flex items-center space-x-4">
           <button

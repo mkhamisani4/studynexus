@@ -489,17 +489,6 @@ export default function StudySchedule() {
           )}
         </div>
 
-        <div className="space-y-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">How It Works</h2>
-            <div className="space-y-3 text-sm text-gray-600 dark:text-gray-300">
-              <p>1. Add your study goals</p>
-              <p>2. Select documents that support each goal</p>
-              <p>3. Generate a content-based plan</p>
-              <p>4. Study topics in the recommended order</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   )

@@ -11,6 +11,8 @@ import ReverseLearning from './features/ReverseLearning'
 import AdditionalResources from './features/AdditionalResources'
 import ResearchAssistant from './features/ResearchAssistant'
 import DashboardView from './features/DashboardView'
+import About from './features/About'
+import Profile from './features/Profile'
 
 interface DashboardProps {
   activeView: string
@@ -47,6 +49,10 @@ export default function Dashboard({ activeView, setActiveView, viewData }: Dashb
         />
       case 'research':
         return <ResearchAssistant />
+      case 'about':
+        return <About />
+      case 'profile':
+        return <Profile />
       default:
         return <DashboardView />
     }
@@ -54,4 +60,3 @@ export default function Dashboard({ activeView, setActiveView, viewData }: Dashb
 
   return <div className="w-full max-w-full mx-auto overflow-x-hidden">{renderView()}</div>
 }
-

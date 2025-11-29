@@ -207,57 +207,57 @@ export default function StudyMaterials({ setActiveView }: StudyMaterialsProps = 
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Study Materials</h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-1">Upload and organize your notes, PDFs, and documents</p>
+        <div className="space-y-2">
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-50">Study Materials</h1>
+          <p className="text-sm text-slate-600 dark:text-slate-400">Upload and organize your notes, PDFs, and documents</p>
         </div>
         <button
           onClick={() => setShowUpload(true)}
-          className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-medium hover:shadow-lg transition-all flex items-center space-x-2"
+          className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
         >
-          <Upload className="w-5 h-5" />
+          <Upload className="h-4 w-4" />
           <span>Upload Material</span>
         </button>
       </div>
 
       {showUpload && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-xl p-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Upload New Material</h2>
-            <button onClick={() => setShowUpload(false)} className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300">
-              <X className="w-5 h-5" />
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50">Upload New Material</h2>
+            <button onClick={() => setShowUpload(false)} className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300">
+              <X className="h-4 w-4" />
             </button>
           </div>
           <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Title</label>
+            <div className="space-y-2">
+              <label className="text-xs font-medium text-slate-700 dark:text-slate-300">Title</label>
               <input
                 type="text"
                 value={newMaterial.title}
                 onChange={(e) => setNewMaterial({ ...newMaterial, title: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:focus:border-slate-600 dark:focus:ring-slate-600"
                 placeholder="e.g., Linear Algebra Lecture 3"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subject</label>
+            <div className="space-y-2">
+              <label className="text-xs font-medium text-slate-700 dark:text-slate-300">Subject</label>
               <input
                 type="text"
                 value={newMaterial.subject}
                 onChange={(e) => setNewMaterial({ ...newMaterial, subject: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:focus:border-slate-600 dark:focus:ring-slate-600"
                 placeholder="e.g., Mathematics"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Content</label>
+            <div className="space-y-2">
+              <label className="text-xs font-medium text-slate-700 dark:text-slate-300">Content</label>
               <textarea
                 value={newMaterial.content}
                 onChange={(e) => setNewMaterial({ ...newMaterial, content: e.target.value })}
                 rows={6}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:focus:border-slate-600 dark:focus:ring-slate-600"
                 placeholder="Paste your notes or content here..."
               />
             </div>
@@ -278,17 +278,17 @@ export default function StudyMaterials({ setActiveView }: StudyMaterialsProps = 
                 </label>
               </div>
             </div>
-            <div className="flex space-x-3">
+            <div className="flex gap-3">
               <button
                 onClick={handleUpload}
                 disabled={uploading}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-medium hover:shadow-lg transition-all disabled:opacity-50"
+                className="flex-1 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50 dark:bg-blue-500 dark:hover:bg-blue-600"
               >
                 {uploading ? 'Uploading...' : 'Upload'}
               </button>
               <button
                 onClick={() => setShowUpload(false)}
-                className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
+                className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
               >
                 Cancel
               </button>
@@ -311,25 +311,25 @@ export default function StudyMaterials({ setActiveView }: StudyMaterialsProps = 
             </div>
           ) : (
             materials.map((material) => (
-              <div key={material.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-lg p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-xl transition-all">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                      <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <div key={material.id} className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-colors hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900/50 dark:hover:border-slate-700">
+                <div className="mb-4 flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/20">
+                      <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                     </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">{material.title}</h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{material.subject}</p>
+                    <div className="space-y-0.5">
+                      <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-50">{material.title}</h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-500">{material.subject}</p>
                     </div>
                   </div>
                   <button 
                     onClick={() => handleDelete(material.id)}
-                    className="text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400"
+                    className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
                   >
-                    <X className="w-4 h-4" />
+                    <X className="h-4 w-4" />
                   </button>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 mb-4">{material.content}</p>
+                <p className="mb-4 line-clamp-3 text-sm text-slate-600 dark:text-slate-400">{material.content}</p>
                 <div className="flex flex-col space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-gray-500 dark:text-gray-400">

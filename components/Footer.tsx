@@ -1,70 +1,74 @@
 'use client'
 
-import { Github, Twitter, Mail, Heart } from 'lucide-react'
+import {
+  LayoutDashboard,
+  FileText,
+  Brain,
+  GraduationCap,
+  HelpCircle,
+  Calendar,
+  Target,
+  Zap,
+  TrendingUp,
+  FileSearch,
+  Lightbulb,
+  Info,
+  User
+} from 'lucide-react'
 
-export default function Footer() {
+const menuItems = [
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'progress', label: 'Progress', icon: TrendingUp },
+  { id: 'materials', label: 'Study Materials', icon: FileText },
+  { id: 'knowledge-graph', label: 'Word Map', icon: Brain },
+  { id: 'exam-mode', label: 'Exam Mode', icon: GraduationCap },
+  { id: 'flashcards', label: 'Flashcards', icon: Zap },
+  { id: 'explain', label: 'Explain Concepts', icon: HelpCircle },
+  { id: 'schedule', label: 'Study Goals', icon: Calendar },
+  { id: 'reverse-learning', label: 'Reverse Learning', icon: Target },
+  { id: 'research', label: 'Research Assistant', icon: Lightbulb },
+  { id: 'citations', label: 'Additional Resources', icon: FileSearch },
+  { id: 'about', label: 'About', icon: Info },
+  { id: 'profile', label: 'Profile', icon: User },
+]
+
+interface FooterProps {
+  setActiveView?: (view: string) => void
+}
+
+export default function Footer({ setActiveView }: FooterProps) {
   return (
-    <footer className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">StudyNexus</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Your intelligent learning partner powered by AI. Study smarter, not harder.
-            </p>
+    <footer className="border-t border-slate-200/80 bg-white dark:border-slate-800/80 dark:bg-slate-950">
+      <div className="mx-auto max-w-[1920px] px-6 py-6">
+        <div className="flex flex-col items-center gap-6">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-2 sm:grid-cols-3 lg:grid-cols-4">
+            {menuItems.map((item) => {
+              const Icon = item.icon
+              if (setActiveView) {
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveView(item.id)}
+                    className="flex items-center gap-1.5 text-xs text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-50"
+                  >
+                    <Icon className="h-3 w-3 flex-shrink-0" />
+                    <span>{item.label}</span>
+                  </button>
+                )
+              }
+              return (
+                <div key={item.id} className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400">
+                  <Icon className="h-3 w-3 flex-shrink-0" />
+                  <span>{item.label}</span>
+                </div>
+              )
+            })}
           </div>
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Features</h3>
-            <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-              <li>Knowledge Graph</li>
-              <li>Exam Mode</li>
-              <li>Flashcards</li>
-              <li>Explain Concepts</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Connect</h3>
-            <div className="flex items-center space-x-4">
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                aria-label="GitHub"
-              >
-                <Github className="w-5 h-5" />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                aria-label="Twitter"
-              >
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a
-                href="mailto:support@aistudycompanion.com"
-                className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                aria-label="Email"
-              >
-                <Mail className="w-5 h-5" />
-              </a>
-            </div>
-          </div>
-        </div>
-        <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row items-center justify-between">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-xs text-slate-600 dark:text-slate-400">
             © {new Date().getFullYear()} StudyNexus. All rights reserved.
-          </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-4 md:mt-0 flex items-center space-x-1">
-            <span>Made with</span>
-            <Heart className="w-4 h-4 text-red-500" />
-            <span>for students</span>
           </p>
         </div>
       </div>
     </footer>
   )
 }
-

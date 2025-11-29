@@ -260,7 +260,7 @@ export default function ExamMode() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Exam Mode</h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-1">AI-generated practice exams based on your study materials</p>
+          <p className="text-gray-600 dark:text-gray-300 mt-1">Practice exams based on your study materials</p>
         </div>
         {!exam && (
           <div className="flex items-center space-x-4">

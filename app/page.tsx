@@ -33,7 +33,6 @@ export default function Home() {
 
     checkAuth()
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (!session && event === 'SIGNED_OUT') {
         router.push('/landing')
@@ -47,27 +46,28 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="flex min-h-screen items-center justify-center bg-white dark:bg-slate-950">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-300">Loading...</p>
+          <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-2 border-slate-200 border-t-slate-900 dark:border-slate-800 dark:border-t-slate-50"></div>
+          <p className="text-sm text-slate-600 dark:text-slate-400">Loading...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
+    <div className="flex min-h-screen flex-col bg-white dark:bg-slate-950">
       <Header />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar activeView={activeView} setActiveView={handleSetActiveView} />
-        <main className="flex-1 p-6 overflow-x-auto min-w-0">
-          <Dashboard activeView={activeView} setActiveView={handleSetActiveView} viewData={viewData} />
+        <main className="flex-1 overflow-y-auto">
+          <div className="mx-auto max-w-[1920px] p-8">
+            <Dashboard activeView={activeView} setActiveView={handleSetActiveView} viewData={viewData} />
+          </div>
         </main>
       </div>
-      <Footer />
+      <Footer setActiveView={handleSetActiveView} />
       <ChatAssistant />
     </div>
   )
 }
-

@@ -99,28 +99,28 @@ export default function ExplainConcepts() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Explain Concepts</h1>
-        <p className="text-gray-600 dark:text-gray-300 mt-1">Ask questions and get explanations based on your notes</p>
+    <div className="space-y-8">
+      <div className="space-y-2">
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-50">Explain Concepts</h1>
+        <p className="text-sm text-slate-600 dark:text-slate-400">Ask questions and get explanations based on your notes</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Ask Your Question</h2>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+          <h2 className="mb-6 text-lg font-semibold text-slate-900 dark:text-slate-50">Ask Your Question</h2>
           <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <div className="space-y-2">
+              <label className="text-xs font-medium text-slate-700 dark:text-slate-300">
                 What would you like explained?
               </label>
               <textarea
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 rows={5}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:focus:border-slate-600 dark:focus:ring-slate-600"
                 placeholder="Ask in your own words... e.g., 'Explain how photosynthesis works like I'm 5', 'What's the difference between recursion and iteration?', 'Help me understand derivatives in simple terms'"
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p className="text-xs text-slate-500 dark:text-slate-500">
                 Ask naturally - the AI will adapt to your style and use your notes to explain
               </p>
             </div>
@@ -168,7 +168,7 @@ export default function ExplainConcepts() {
             <button
               onClick={generateExplanation}
               disabled={loading || !question.trim() || selectedNotes.length === 0}
-              className="w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-medium hover:shadow-lg transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-blue-500 dark:hover:bg-blue-600"
             >
               {loading ? (
                 <>
@@ -185,7 +185,7 @@ export default function ExplainConcepts() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Explanation</h2>
           {loading ? (
             <div className="flex flex-col items-center justify-center h-full min-h-[300px] text-center">
@@ -226,13 +226,6 @@ export default function ExplainConcepts() {
         </div>
       </div>
 
-      <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
-        <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-2">💡 How It Works</h3>
-        <p className="text-blue-800 dark:text-blue-200 text-sm">
-          Ask questions in your own words - whether you want a simple explanation, a detailed breakdown, or help with a specific concept. 
-          The AI will use your uploaded notes as the primary source and adapt the explanation style to match how you ask.
-        </p>
-      </div>
     </div>
   )
 }
