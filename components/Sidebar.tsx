@@ -12,8 +12,7 @@ import {
   Zap,
   TrendingUp,
   FileSearch,
-  Lightbulb,
-  MessageSquare
+  Lightbulb
 } from 'lucide-react'
 
 interface SidebarProps {
@@ -23,17 +22,16 @@ interface SidebarProps {
 
 const menuItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'progress', label: 'Progress', icon: TrendingUp },
   { id: 'materials', label: 'Study Materials', icon: FileText },
   { id: 'knowledge-graph', label: 'Word Map', icon: Brain },
   { id: 'exam-mode', label: 'Exam Mode', icon: GraduationCap },
   { id: 'flashcards', label: 'Flashcards', icon: Zap },
   { id: 'explain', label: 'Explain Concepts', icon: HelpCircle },
-  { id: 'coach', label: 'Study Coach', icon: MessageSquare },
   { id: 'schedule', label: 'Study Goals', icon: Calendar },
-  { id: 'progress', label: 'Progress', icon: TrendingUp },
   { id: 'reverse-learning', label: 'Reverse Learning', icon: Target },
-  { id: 'citations', label: 'Citation Finder', icon: FileSearch },
   { id: 'research', label: 'Research Assistant', icon: Lightbulb },
+  { id: 'citations', label: 'Additional Resources', icon: FileSearch },
 ]
 
 export default function Sidebar({ activeView, setActiveView }: SidebarProps) {
@@ -51,11 +49,11 @@ export default function Sidebar({ activeView, setActiveView }: SidebarProps) {
                   className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${
                     isActive
                       ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                      : 'text-gray-700 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800'
                   }`}
                 >
-                  <Icon className="w-5 h-5" />
-                  <span className="font-medium">{item.label}</span>
+                  <Icon className="w-5 h-5 flex-shrink-0" />
+                  <span className="font-medium whitespace-nowrap">{item.label}</span>
                 </button>
               </li>
             )

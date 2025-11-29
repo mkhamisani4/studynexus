@@ -33,8 +33,8 @@ export default function LandingPage() {
     },
     {
       icon: Target,
-      title: 'Personalized Coaching',
-      description: 'Get AI-powered study recommendations and motivation',
+      title: 'Study Goals',
+      description: 'Set and track your learning objectives with AI-powered scheduling',
       color: 'from-green-500 to-emerald-500'
     }
   ]

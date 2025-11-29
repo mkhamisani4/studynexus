@@ -49,23 +49,23 @@ export default function ResearchAssistant() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Research Assistant</h1>
-        <p className="text-gray-600 mt-1">AI-powered research paper analysis and summarization</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Research Assistant</h1>
+        <p className="text-gray-600 dark:text-gray-300 mt-1">AI-powered research paper analysis and summarization</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Input Research Paper</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Input Research Paper</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Paper Content
               </label>
               <textarea
                 value={paperContent}
                 onChange={(e) => setPaperContent(e.target.value)}
                 rows={16}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Paste the research paper content here. The AI will analyze it and provide summaries, key contributions, contrasting viewpoints, and potential exam questions..."
               />
             </div>
@@ -80,61 +80,61 @@ export default function ResearchAssistant() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Analysis Results</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Analysis Results</h2>
           {analysis ? (
             <div className="space-y-6 max-h-[700px] overflow-y-auto">
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2 flex items-center space-x-2">
-                  <FileText className="w-5 h-5 text-blue-600" />
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center space-x-2">
+                  <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   <span>Summary</span>
                 </h3>
-                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <ReactMarkdown className="prose prose-sm max-w-none">{analysis.summary}</ReactMarkdown>
+                <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <ReactMarkdown className="prose prose-sm dark:prose-invert max-w-none">{analysis.summary}</ReactMarkdown>
                 </div>
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2 flex items-center space-x-2">
-                  <Lightbulb className="w-5 h-5 text-green-600" />
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center space-x-2">
+                  <Lightbulb className="w-5 h-5 text-green-600 dark:text-green-400" />
                   <span>Key Contributions</span>
                 </h3>
                 <ul className="space-y-2">
                   {analysis.key_contributions.map((contribution: string, idx: number) => (
-                    <li key={idx} className="p-3 bg-green-50 rounded-lg border border-green-200 flex items-start space-x-2">
-                      <span className="font-bold text-green-600">{idx + 1}.</span>
-                      <span className="text-gray-700">{contribution}</span>
+                    <li key={idx} className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800 flex items-start space-x-2">
+                      <span className="font-bold text-green-600 dark:text-green-400">{idx + 1}.</span>
+                      <span className="text-gray-700 dark:text-gray-300">{contribution}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2 flex items-center space-x-2">
-                  <BookOpen className="w-5 h-5 text-yellow-600" />
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center space-x-2">
+                  <BookOpen className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
                   <span>Contrasting Viewpoints</span>
                 </h3>
                 <ul className="space-y-2">
                   {analysis.contrasting_viewpoints.map((viewpoint: string, idx: number) => (
-                    <li key={idx} className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                      <span className="text-gray-700">{viewpoint}</span>
+                    <li key={idx} className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                      <span className="text-gray-700 dark:text-gray-300">{viewpoint}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Potential Exam Questions</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Potential Exam Questions</h3>
                 <div className="space-y-3">
                   {analysis.potential_questions.map((q: any, idx: number) => (
-                    <div key={idx} className="p-4 bg-purple-50 rounded-lg border border-purple-200">
+                    <div key={idx} className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium text-purple-700 capitalize">{q.type}</span>
-                        <span className="text-xs text-gray-500">Question {idx + 1}</span>
+                        <span className="text-sm font-medium text-purple-700 dark:text-purple-300 capitalize">{q.type}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">Question {idx + 1}</span>
                       </div>
-                      <p className="font-semibold text-gray-900 mb-2">{q.question}</p>
-                      <div className="p-2 bg-white rounded border border-purple-200">
-                        <p className="text-sm text-gray-700">{q.answer}</p>
+                      <p className="font-semibold text-gray-900 dark:text-white mb-2">{q.question}</p>
+                      <div className="p-2 bg-white dark:bg-gray-700 rounded border border-purple-200 dark:border-purple-800">
+                        <p className="text-sm text-gray-700 dark:text-gray-300">{q.answer}</p>
                       </div>
                     </div>
                   ))}
@@ -143,8 +143,8 @@ export default function ResearchAssistant() {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full min-h-[600px] text-center">
-              <Lightbulb className="w-16 h-16 text-gray-300 mb-4" />
-              <p className="text-gray-500">Enter research paper content to get AI-powered analysis</p>
+              <Lightbulb className="w-16 h-16 text-gray-300 dark:text-gray-600 mb-4" />
+              <p className="text-gray-500 dark:text-gray-400">Enter research paper content to get AI-powered analysis</p>
             </div>
           )}
         </div>

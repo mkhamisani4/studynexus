@@ -70,7 +70,12 @@ export default function StudySchedule() {
       if (data && data.length > 0) {
         const scheduleData = data[0].schedule_data as any
         if (scheduleData?.goals) {
-          setGoals(scheduleData.goals)
+          // Normalize goals to ensure materialIds is always an array
+          const normalizedGoals = scheduleData.goals.map((g: Goal) => ({
+            ...g,
+            materialIds: Array.isArray(g.materialIds) ? g.materialIds : []
+          }))
+          setGoals(normalizedGoals)
         }
         if (scheduleData?.plan) {
           setPlan(scheduleData.plan)
@@ -162,7 +167,7 @@ export default function StudySchedule() {
     }
 
     // Check all goals have materials
-    const goalsWithoutMaterials = goals.filter(g => g.materialIds.length === 0)
+    const goalsWithoutMaterials = goals.filter(g => !g.materialIds || !Array.isArray(g.materialIds) || g.materialIds.length === 0)
     if (goalsWithoutMaterials.length > 0) {
       showError('Missing Materials', 'Some goals are missing supporting documents. Please add materials to all goals.')
       return
@@ -176,7 +181,7 @@ export default function StudySchedule() {
       if (!user) throw new Error('Not authenticated')
 
       // Get full material details for selected materials
-      const allMaterialIds = goals.flatMap(g => g.materialIds)
+      const allMaterialIds = goals.flatMap(g => (g.materialIds && Array.isArray(g.materialIds)) ? g.materialIds : [])
       const { data: materialsData } = await supabase
         .from('study_materials')
         .select('*')
@@ -189,7 +194,7 @@ export default function StudySchedule() {
         body: JSON.stringify({
           goals: goals.map(g => ({
             ...g,
-            materials: materialsData?.filter(m => g.materialIds.includes(m.id)) || []
+            materials: materialsData?.filter(m => g.materialIds && Array.isArray(g.materialIds) && g.materialIds.includes(m.id)) || []
           }))
         })
       })
@@ -225,6 +230,9 @@ export default function StudySchedule() {
   }
 
   const getGoalMaterials = (goal: Goal) => {
+    if (!goal.materialIds || !Array.isArray(goal.materialIds)) {
+      return []
+    }
     return availableMaterials.filter(m => goal.materialIds.includes(m.id))
   }
 

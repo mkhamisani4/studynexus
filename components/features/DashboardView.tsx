@@ -5,7 +5,7 @@ import { TrendingUp, BookOpen, Target, Zap, Calendar, Brain, Loader2 } from 'luc
 import { supabase } from '@/lib/supabase'
 
 interface DashboardViewProps {
-  setActiveView: (view: string) => void
+  setActiveView: (view: string, data?: any) => void
 }
 
 export default function DashboardView({ setActiveView }: DashboardViewProps) {

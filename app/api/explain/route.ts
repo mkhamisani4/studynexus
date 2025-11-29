@@ -3,16 +3,18 @@ import { generateExplanation } from '@/lib/openai'
 
 export async function POST(request: NextRequest) {
   try {
-    const { concept, context, level, userMaterials } = await request.json()
+    const { question, userMaterials } = await request.json()
 
-    if (!concept) {
-      return NextResponse.json({ error: 'Concept is required' }, { status: 400 })
+    if (!question || !question.trim()) {
+      return NextResponse.json({ error: 'Question is required' }, { status: 400 })
+    }
+
+    if (!userMaterials || userMaterials.length === 0) {
+      return NextResponse.json({ error: 'At least one note must be selected' }, { status: 400 })
     }
 
     const result = await generateExplanation(
-      concept, 
-      context || '', 
-      level || 'standard',
+      question.trim(),
       userMaterials || []
     )
 

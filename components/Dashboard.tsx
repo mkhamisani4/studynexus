@@ -5,26 +5,26 @@ import KnowledgeGraph from './features/KnowledgeGraph'
 import ExamMode from './features/ExamMode'
 import Flashcards from './features/Flashcards'
 import ExplainConcepts from './features/ExplainConcepts'
-import StudyCoach from './features/StudyCoach'
 import StudySchedule from './features/StudySchedule'
 import Progress from './features/Progress'
 import ReverseLearning from './features/ReverseLearning'
-import CitationFinder from './features/CitationFinder'
+import AdditionalResources from './features/AdditionalResources'
 import ResearchAssistant from './features/ResearchAssistant'
 import DashboardView from './features/DashboardView'
 
 interface DashboardProps {
   activeView: string
   setActiveView: (view: string) => void
+  viewData?: any
 }
 
-export default function Dashboard({ activeView, setActiveView }: DashboardProps) {
+export default function Dashboard({ activeView, setActiveView, viewData }: DashboardProps) {
   const renderView = () => {
     switch (activeView) {
       case 'dashboard':
         return <DashboardView setActiveView={setActiveView} />
       case 'materials':
-        return <StudyMaterials />
+        return <StudyMaterials setActiveView={setActiveView} />
       case 'knowledge-graph':
         return <KnowledgeGraph />
       case 'exam-mode':
@@ -33,8 +33,6 @@ export default function Dashboard({ activeView, setActiveView }: DashboardProps)
         return <Flashcards />
       case 'explain':
         return <ExplainConcepts />
-      case 'coach':
-        return <StudyCoach />
       case 'schedule':
         return <StudySchedule />
       case 'progress':
@@ -42,7 +40,11 @@ export default function Dashboard({ activeView, setActiveView }: DashboardProps)
       case 'reverse-learning':
         return <ReverseLearning />
       case 'citations':
-        return <CitationFinder />
+        return <AdditionalResources 
+          initialContent={viewData?.content || ''} 
+          materialTitle={viewData?.title}
+          initialMaterialId={viewData?.materialId}
+        />
       case 'research':
         return <ResearchAssistant />
       default:

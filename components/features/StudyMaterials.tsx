@@ -1,10 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Upload, FileText, X, Sparkles, Loader2 } from 'lucide-react'
+import { Upload, FileText, X, Sparkles, Loader2, ExternalLink } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
-export default function StudyMaterials() {
+interface StudyMaterialsProps {
+  setActiveView?: (view: string, data?: any) => void
+}
+
+export default function StudyMaterials({ setActiveView }: StudyMaterialsProps = {}) {
   const [materials, setMaterials] = useState<any[]>([])
   const [uploading, setUploading] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -326,17 +330,28 @@ export default function StudyMaterials() {
                   </button>
                 </div>
                 <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 mb-4">{material.content}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    {new Date(material.created_at).toLocaleDateString()}
-                  </span>
-                  <button 
-                    onClick={() => handleGenerateQuiz(material.id)}
-                    className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium flex items-center space-x-1"
-                  >
-                    <Sparkles className="w-4 h-4" />
-                    <span>Generate Quiz</span>
-                  </button>
+                <div className="flex flex-col space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {new Date(material.created_at).toLocaleDateString()}
+                    </span>
+                    <button 
+                      onClick={() => handleGenerateQuiz(material.id)}
+                      className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium flex items-center space-x-1"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      <span>Generate Quiz</span>
+                    </button>
+                  </div>
+                  {setActiveView && (
+                    <button
+                      onClick={() => setActiveView('citations', { materialId: material.id, title: material.title })}
+                      className="w-full text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium flex items-center justify-center space-x-1 px-3 py-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      <span>Find Additional Resources</span>
+                    </button>
+                  )}
                 </div>
               </div>
             ))

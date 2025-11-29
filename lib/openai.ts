@@ -11,35 +11,30 @@ export interface ExplanationLevel {
 }
 
 export async function generateExplanation(
-  concept: string,
-  context: string,
-  level: ExplanationLevel['level'],
-  userMaterials: Array<{ title: string; content: string; subject?: string }> = []
-): Promise<{ explanation: string; sourceBreakdown: string }> {
+  question: string,
+  userMaterials: Array<{ id?: string; title: string; content: string; subject?: string }> = []
+): Promise<{ explanation: string; usedNoteIds: string[] }> {
   if (!openai) {
     return {
       explanation: 'OpenAI API key not configured. Please add your API key to continue.',
-      sourceBreakdown: ''
+      usedNoteIds: []
     }
   }
 
-  const levelPrompts = {
-    eli5: 'Explain this like I\'m 5 years old. Use simple words, analogies, and examples a child would understand.',
-    beginner: 'Explain this for someone who is just starting to learn. Use simple language and provide clear examples.',
-    standard: 'Explain this at a standard student level. Include technical terms but define them clearly.',
-    graduate: 'Explain this at a graduate level. Assume familiarity with the field and use appropriate terminology.',
-    professor: 'Explain this at a professor/technical expert level. Include deep technical details, mathematical formulations, and advanced concepts.'
+  if (userMaterials.length === 0) {
+    return {
+      explanation: 'Please select at least one note to use for the explanation.',
+      usedNoteIds: []
+    }
   }
 
-  // Prepare user materials content
-  const userMaterialsContent = userMaterials.length > 0
-    ? `\n\nSTUDENT'S STUDY MATERIALS:\n${userMaterials.map(m => `Title: ${m.title}\nSubject: ${m.subject || 'General'}\nContent: ${m.content}`).join('\n\n---\n\n')}`
-    : ''
-
-  // Calculate how much content is from user materials vs online
-  const hasUserMaterials = userMaterials.length > 0
-  const userMaterialsLength = userMaterials.reduce((sum, m) => sum + (m.content?.length || 0), 0)
-  const estimatedUserContribution = userMaterialsLength > 1000 ? 'significant' : userMaterialsLength > 500 ? 'moderate' : 'minimal'
+  // Prepare user materials content with IDs for tracking
+  const userMaterialsContent = userMaterials
+    .map(m => {
+      const materialId = m.id || ''
+      return `[NOTE_ID:${materialId}]\nTitle: ${m.title}\nSubject: ${m.subject || 'General'}\nContent: ${m.content || ''}\n[/NOTE_ID:${materialId}]`
+    })
+    .join('\n\n---\n\n')
 
   try {
     const response = await openai.chat.completions.create({
@@ -47,18 +42,55 @@ export async function generateExplanation(
       messages: [
         {
           role: 'system',
-          content: `You are an expert tutor. ${levelPrompts[level]}
+          content: `You are an expert tutor helping a student understand concepts using their own study notes.
 
-IMPORTANT INSTRUCTIONS:
-1. Use the student's study materials (if provided) as the PRIMARY source for explaining the concept
-2. Supplement with your general knowledge when the student's materials don't fully cover the concept
-3. Prioritize information from the student's materials to help them connect with what they've already studied
-4. When using information from the student's materials, reference them naturally (e.g., "As mentioned in your notes...", "Based on your study materials...")
-5. After your explanation, provide a source breakdown showing what percentage came from the student's materials vs. online/general knowledge`
+CRITICAL INSTRUCTIONS:
+1. The student's notes are the PRIMARY source - use them as much as possible
+2. Analyze the student's question to understand:
+   - What they're asking about
+   - The style/level they want (simple, detailed, technical, etc.) based on how they phrase it
+   - Any specific context or requirements they mention
+3. Extract relevant information from the student's notes first
+4. Only supplement with your general knowledge when:
+   - The notes don't cover the concept at all
+   - The notes are incomplete and need clarification
+   - You need to connect concepts that aren't explicitly connected in the notes
+5. Match the explanation style to how they asked:
+   - If they say "like I'm 5" or "simple terms" → use very simple language
+   - If they ask "what's the difference" → focus on comparisons
+   - If they ask "how does X work" → provide step-by-step explanations
+   - If they use technical terms → you can use technical language
+6. Reference the notes naturally when using information from them
+
+FORMATTING AND LENGTH GUIDELINES:
+- DEFAULT: Be CONCISE and to the point. Get straight to the answer without unnecessary preamble
+- Only be detailed/verbose if the user explicitly asks for:
+  * "detailed explanation"
+  * "in-depth"
+  * "comprehensive"
+  * "explain thoroughly"
+  * "more description"
+  * "step by step" (for processes)
+- Use clear line spacing between major points or sections (double line breaks)
+- Structure your response with:
+  * Clear paragraphs separated by blank lines
+  * Bullet points or numbered lists when appropriate
+  * Headers (##) for major sections if the explanation is longer
+- Keep paragraphs short (2-4 sentences max) for readability
+- Use markdown formatting for clarity (bold for key terms, lists for multiple points)
+
+7. At the end of your response, include a line starting with "NOTES_USED:" followed by comma-separated note IDs (the IDs from [NOTE_ID:...] tags) that you actually used information from
+
+IMPORTANT: Only list note IDs that you actually extracted meaningful information from. If you used general knowledge for most of the answer, only list notes that contributed significantly.`
         },
         {
           role: 'user',
-          content: `Concept to explain: ${concept}\n\nAdditional context: ${context}${userMaterialsContent}\n\nPlease explain this concept using the student's materials as the primary source, supplemented with your knowledge. After the explanation, provide a source breakdown in this format: "Source: X% from your study materials, Y% from online/general knowledge"`
+          content: `Student's Question: ${question}
+
+STUDENT'S NOTES:
+${userMaterialsContent}
+
+Please explain based on the student's question, using their notes as the primary source. Adapt your explanation style to match how they asked the question.`
         }
       ],
       temperature: 0.7,
@@ -66,38 +98,76 @@ IMPORTANT INSTRUCTIONS:
 
     const fullResponse = response.choices[0]?.message?.content || 'Unable to generate explanation.'
     
-    // Extract source breakdown from the response
+    // Extract used note IDs from the response
     let explanation = fullResponse
-    let sourceBreakdown = ''
+    let usedNoteIds: string[] = []
     
-    // Look for source breakdown pattern
-    const sourceMatch = fullResponse.match(/Source:\s*([^\n]+)/i)
-    if (sourceMatch) {
-      sourceBreakdown = sourceMatch[1].trim()
-      // Remove the source line from the explanation
-      explanation = fullResponse.replace(/Source:.*$/i, '').trim()
+    // Look for NOTES_USED pattern
+    const notesUsedMatch = fullResponse.match(/NOTES_USED:\s*([^\n]+)/i)
+    if (notesUsedMatch) {
+      const noteIdsString = notesUsedMatch[1].trim()
+      usedNoteIds = noteIdsString
+        .split(',')
+        .map(id => id.trim())
+        .filter(id => id.length > 0 && userMaterials.some(m => (m.id || '') === id))
+      
+      // Remove the NOTES_USED line from the explanation
+      explanation = fullResponse.replace(/NOTES_USED:.*$/i, '').trim()
     } else {
-      // Generate a breakdown based on whether we had user materials
-      if (hasUserMaterials) {
-        const userPercent = estimatedUserContribution === 'significant' ? 50 : estimatedUserContribution === 'moderate' ? 30 : 15
-        const onlinePercent = 100 - userPercent
-        sourceBreakdown = `${userPercent}% from your study materials, ${onlinePercent}% from online/general knowledge`
-      } else {
-        sourceBreakdown = '100% from online/general knowledge (no study materials provided)'
-      }
+      // If no explicit note IDs, try to infer from content similarity
+      // For now, if we have notes and got a response, assume we used relevant ones
+      // This is a fallback - the AI should ideally always include NOTES_USED
+      usedNoteIds = userMaterials
+        .filter(m => {
+          const content = (m.content || '').toLowerCase()
+          const questionLower = question.toLowerCase()
+          // Check if note content is relevant to the question
+          return questionLower.split(' ').some(word => 
+            word.length > 3 && content.includes(word)
+          )
+        })
+        .map(m => m.id || '')
+        .filter(id => id.length > 0)
     }
+
+    // Post-process explanation for better formatting
+    explanation = formatExplanation(explanation)
 
     return {
       explanation,
-      sourceBreakdown
+      usedNoteIds
     }
   } catch (error) {
     console.error('OpenAI API error:', error)
     return {
       explanation: 'Error generating explanation. Please check your API key and try again.',
-      sourceBreakdown: ''
+      usedNoteIds: []
     }
   }
+}
+
+// Helper function to format explanations with proper spacing
+function formatExplanation(text: string): string {
+  if (!text) return text
+
+  // Normalize line breaks (ensure consistent spacing)
+  let formatted = text
+    // Replace multiple blank lines (3+) with double line break
+    .replace(/\n{3,}/g, '\n\n')
+    // Ensure proper spacing around headers (but not if already spaced)
+    .replace(/([^\n])\n(#{1,6}\s+[^\n]+)/g, '$1\n\n$2')
+    .replace(/(#{1,6}\s+[^\n]+)\n([^\n])/g, '$1\n\n$2')
+    // Ensure spacing around lists (but not if already spaced)
+    .replace(/([^\n])\n([-*+]\s+[^\n]+)/g, '$1\n\n$2')
+    .replace(/([^\n])\n(\d+\.\s+[^\n]+)/g, '$1\n\n$2')
+    // Ensure paragraphs ending with punctuation are separated by blank lines
+    // Only if the next line starts with a capital letter (new sentence/paragraph)
+    .replace(/([.!?])\n([A-Z][a-z])/g, '$1\n\n$2')
+    // Clean up any remaining triple+ line breaks
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
+
+  return formatted
 }
 
 export async function generateQuizFromContent(
@@ -357,38 +427,6 @@ export async function generateContentSchedule(
   } catch (error) {
     console.error('OpenAI API error:', error)
     return []
-  }
-}
-
-export async function generateWeeklyDigest(
-  progress: any,
-  weakAreas: string[],
-  strongAreas: string[]
-): Promise<string> {
-  if (!openai) {
-    return 'OpenAI API key not configured.'
-  }
-
-  try {
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4-turbo-preview',
-      messages: [
-        {
-          role: 'system',
-          content: 'You are a motivational study coach. Create weekly progress summaries that are encouraging and actionable.'
-        },
-        {
-          role: 'user',
-          content: `Create a weekly progress digest. Progress: ${JSON.stringify(progress)}, Weak Areas: ${weakAreas.join(', ')}, Strong Areas: ${strongAreas.join(', ')}. Include achievements, areas for improvement, and a recommended plan for next week.`
-        }
-      ],
-      temperature: 0.8,
-    })
-
-    return response.choices[0]?.message?.content || 'Unable to generate digest.'
-  } catch (error) {
-    console.error('OpenAI API error:', error)
-    return 'Error generating weekly digest.'
   }
 }
 

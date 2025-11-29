@@ -19,7 +19,7 @@ export default function Footer() {
               <li>Knowledge Graph</li>
               <li>Exam Mode</li>
               <li>Flashcards</li>
-              <li>Study Coach</li>
+              <li>Explain Concepts</li>
             </ul>
           </div>
           <div>

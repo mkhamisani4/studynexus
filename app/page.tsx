@@ -10,8 +10,14 @@ import Footer from '@/components/Footer'
 
 export default function Home() {
   const [activeView, setActiveView] = useState('dashboard')
+  const [viewData, setViewData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
+
+  const handleSetActiveView = (view: string, data?: any) => {
+    setActiveView(view)
+    setViewData(data || null)
+  }
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -53,9 +59,9 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
       <Header />
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar activeView={activeView} setActiveView={setActiveView} />
+        <Sidebar activeView={activeView} setActiveView={handleSetActiveView} />
         <main className="flex-1 p-6 overflow-x-auto min-w-0">
-          <Dashboard activeView={activeView} setActiveView={setActiveView} />
+          <Dashboard activeView={activeView} setActiveView={handleSetActiveView} viewData={viewData} />
         </main>
       </div>
       <Footer />
