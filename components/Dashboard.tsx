@@ -54,7 +54,7 @@ export default function Dashboard({ activeView, setActiveView, viewData }: Dashb
       case 'profile':
         return <Profile />
       default:
-        return <DashboardView />
+        return <DashboardView setActiveView={setActiveView} />
     }
   }
 
