@@ -7,6 +7,7 @@ import Dashboard from '@/components/Dashboard'
 import Sidebar from '@/components/Sidebar'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import ChatAssistant from '@/components/ChatAssistant'
 
 export default function Home() {
   const [activeView, setActiveView] = useState('dashboard')
@@ -65,6 +66,7 @@ export default function Home() {
         </main>
       </div>
       <Footer />
+      <ChatAssistant />
     </div>
   )
 }

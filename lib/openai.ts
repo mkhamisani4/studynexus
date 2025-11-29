@@ -610,3 +610,94 @@ export async function generateQuestionsFromWord(
   }
 }
 
+export async function chatWithContext(
+  message: string,
+  conversationHistory: Array<{ role: 'user' | 'assistant'; content: string }> = [],
+  userData?: {
+    materials?: Array<{ id: string; title: string; content: string; subject?: string }>
+    concepts?: Array<{ id: string; name: string; description?: string; mastery_level?: number; subject?: string }>
+    sessions?: Array<{ subject: string; duration_minutes?: number; performance_score?: number; created_at: string }>
+    exams?: Array<{ subject: string; score?: number; completed: boolean; created_at: string }>
+  }
+): Promise<string> {
+  if (!openai) {
+    return 'OpenAI API key not configured. Please add your API key to continue.'
+  }
+
+  // Build context from user data
+  let contextString = ''
+  
+  if (userData?.materials && userData.materials.length > 0) {
+    const materialsText = userData.materials
+      .slice(0, 10) // Limit to 10 most recent
+      .map(m => `Title: ${m.title}\nSubject: ${m.subject || 'General'}\nContent: ${m.content || ''}`)
+      .join('\n\n---\n\n')
+    contextString += `\n\nSTUDENT'S STUDY MATERIALS:\n${materialsText}`
+  }
+
+  if (userData?.concepts && userData.concepts.length > 0) {
+    const conceptsText = userData.concepts
+      .slice(0, 15)
+      .map(c => `${c.name} (${c.subject || 'General'}): ${c.description || 'No description'} - Mastery: ${c.mastery_level || 0}%`)
+      .join('\n')
+    contextString += `\n\nSTUDENT'S CONCEPTS:\n${conceptsText}`
+  }
+
+  if (userData?.sessions && userData.sessions.length > 0) {
+    const sessionsText = userData.sessions
+      .slice(0, 5)
+      .map(s => `${s.subject}: ${s.duration_minutes || 0} min, Score: ${s.performance_score || 'N/A'}%`)
+      .join('\n')
+    contextString += `\n\nRECENT STUDY SESSIONS:\n${sessionsText}`
+  }
+
+  if (userData?.exams && userData.exams.length > 0) {
+    const examsText = userData.exams
+      .slice(0, 5)
+      .map(e => `${e.subject}: ${e.score || 'N/A'}%`)
+      .join('\n')
+    contextString += `\n\nRECENT EXAM RESULTS:\n${examsText}`
+  }
+
+  try {
+    // Build conversation messages
+    const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
+      {
+        role: 'system',
+        content: `You are a helpful AI study assistant. You have access to the student's study materials, concepts, progress, and data.
+
+CRITICAL INSTRUCTIONS:
+1. Be CONCISE and to the point - get straight to the answer
+2. Use the student's data (notes, concepts, progress) as the PRIMARY source when answering questions
+3. Only use general knowledge when the student's data doesn't cover the topic
+4. When referencing the student's materials, mention them naturally (e.g., "According to your notes on...", "In your study materials about...")
+5. Keep responses brief - aim for 2-4 sentences unless the question requires more detail
+6. If asked about progress, use the actual data provided
+7. Be friendly and encouraging
+
+STUDENT'S DATA:${contextString}`
+      },
+      ...conversationHistory.map(msg => ({
+        role: msg.role as 'user' | 'assistant',
+        content: msg.content
+      })),
+      {
+        role: 'user',
+        content: message
+      }
+    ]
+
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4-turbo-preview',
+      messages: messages as any,
+      temperature: 0.7,
+      max_tokens: 300, // Limit response length for conciseness
+    })
+
+    return response.choices[0]?.message?.content || 'I apologize, but I could not generate a response.'
+  } catch (error) {
+    console.error('OpenAI API error:', error)
+    return 'Error generating response. Please try again.'
+  }
+}
+
